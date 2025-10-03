@@ -79,16 +79,15 @@ The API provides the following endpoints:
 4. GET /investors/{investor_id}
    - Get detailed investor information with all commitments
 
-5. GET /investors/{investor_id}/commitments
+5. GET /investors/{investor_id}/summary
+   - Get summary statistics by asset class for individual investors
+
+6. GET /investors/{investor_id}/commitments
    - Get commitments for specific investor
    - Optional query parameter: asset_class (filter by asset class)
 
-6. GET /investors/{investor_id}/summary
-   - Get summary statistics by asset class for individual investors
-
-7. GET /investors/{investor_id}/commitments/filter?asset_class=Hedge%20Funds
-   - Get commitments for specific investor
-   - Compulsory query parameter: asset_class (filter by asset class)
+7. GET /investors/{investor_id}/commitments?asset_class=Hedge%20Funds
+   - Get commitments for specific asset class for a specific investor
 
 
 ==============================================================================

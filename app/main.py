@@ -34,7 +34,7 @@ def read_root(session: Session = Depends(get_session)):
     return {
         "message": "BlackRock - Investor Commitments API", 
         "docs": "/docs",
-        "endpoints": ["/investors", "/asset-classes", "/investors/{investor_id}/summary", "/investors/{investor_id}/commitments", "/investors/{investor_id}/commitments/filter?asset_class=Hedge%20Funds"],
+        "endpoints": ["/investors", "/asset-classes", "/investors/{investor_id}/summary", "/investors/{investor_id}/commitments", "/investors/{investor_id}/commitments?asset_class=Hedge%20Funds"],
         "available_investors": investor_list,
         "total_investors": len(investor_list)
     }
@@ -155,37 +155,3 @@ def get_investor_asset_summary(
         for result in results
     ]
 
-
-@app.get(
-    "/investors/{investor_id}/commitments/filter",
-    response_model=List[CommitmentRead],
-    summary="Commitments filtered by investor and asset class"
-)
-def get_commitments_by_investor_and_asset(
-    investor_id: int = Path(..., description="Investor ID"),
-    asset_class: str = Query(..., description="Asset class to filter by"),
-    session: Session = Depends(get_session)
-):
-    """
-    Return all commitments that belong to the *given* investor **and**
-    match the required *asset_class*.
-    """
-    # validate that the investor exists
-    if session.get(Investor, investor_id) is None:
-        raise HTTPException(
-            status_code=404,
-            detail=f"Investor with ID {investor_id} not found"
-        )
-
-    # query commitments with BOTH conditions
-    stmt = (
-        select(Commitment)
-        .where(
-            Commitment.investor_id == investor_id,
-            Commitment.asset_class == asset_class
-        )
-        .order_by(Commitment.amount.desc())          # (optional) largest first
-    )
-    results = session.exec(stmt).all()
-
-    return results

@@ -187,7 +187,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:8000/investors/1/commitments/filter?asset_class=Hedge Funds",
+					"raw": "http://127.0.0.1:8000/investors/1/commitments?asset_class=Hedge Funds",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -199,8 +199,7 @@
 					"path": [
 						"investors",
 						"1",
-						"commitments",
-						"filter"
+						"commitments"
 					],
 					"query": [
 						{
