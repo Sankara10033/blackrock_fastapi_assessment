@@ -8,14 +8,15 @@ PROJECT STRUCTURE
 ==============================================================================
 
 blackrock-preqin/
-├── README.txt                 # This file (instructions & setup guide)
-├── requirements.txt           # Python packages
-├── data.csv                   # Source data (provided)
-├── db_init.py                # Database initialization script
+├── README.txt                 									# This file (instructions & setup guide)
+├── requirements.txt           									# Python packages
+├── data.csv                   									# Source data (provided)
+├── db_init.py                									# Database initialization script
+├── BlackRock_API_Tests.postman_collection.json                # Postman endpoint tests
 └── app/
-    ├── main.py               # FastAPI application
-    ├── database.py           # Database connection setup
-    └── models.py             # SQLModel models
+    ├── main.py               									# FastAPI application
+    ├── database.py           									# Database connection setup
+    └── models.py             									# SQLModel models
 
 ==============================================================================
 TECHNOLOGY STACK
@@ -72,64 +73,23 @@ The API provides the following endpoints:
    - Investors ordered alphabetically by name
    - IDs assigned in alphabetical order (1=Cza Weasley, 2=Ibx Skywalker, etc.)
 
-3. GET /investors/{investor_id}/commitments
-   - Get commitments for specific investor
-   - Optional query parameter: asset_class (filter by asset class)
+3. GET /asset-classes
+   - Get list of all available asset classes
 
 4. GET /investors/{investor_id}
    - Get detailed investor information with all commitments
 
-5. GET /asset-classes
-   - Get list of all available asset classes
+5. GET /investors/{investor_id}/commitments
+   - Get commitments for specific investor
+   - Optional query parameter: asset_class (filter by asset class)
 
-6. GET /commitments/summary
-   - Get summary statistics by asset class
+6. GET /investors/{investor_id}/summary
+   - Get summary statistics by asset class for individual investors
 
-==============================================================================
-TESTING WITH POSTMAN
-==============================================================================
+7. GET /investors/{investor_id}/commitments/filter?asset_class=Hedge%20Funds
+   - Get commitments for specific investor
+   - Compulsory query parameter: asset_class (filter by asset class)
 
-1. Download and install Postman from https://www.postman.com/downloads/
-
-2. Import the following requests into Postman:
-
-   Collection Name: BlackRock Preqin API Tests
-
-   Request 1: Get All Investors
-   - Method: GET
-   - URL: http://127.0.0.1:8000/investors
-   - Description: Returns all investors with total commitments
-
-   Request 2: Get Investor Commitments
-   - Method: GET  
-   - URL: http://127.0.0.1:8000/investors/1/commitments
-   - Description: Get commitments for Cza Weasley fund (ID 1)
-
-   Request 3: Filter Commitments by Asset Class
-   - Method: GET
-   - URL: http://127.0.0.1:8000/investors/2/commitments?asset_class=Hedge Funds
-   - Description: Get Hedge Fund commitments for Ibx Skywalker ltd (ID 2)
-
-   Request 4: Get Investor Details
-   - Method: GET
-   - URL: http://127.0.0.1:8000/investors/3
-   - Description: Get detailed info for Ioo Gryffindor fund (ID 3)
-
-   Request 5: Get Asset Classes
-   - Method: GET
-   - URL: http://127.0.0.1:8000/asset-classes
-   - Description: List all available asset classes
-
-   Request 6: Get Summary Statistics
-   - Method: GET
-   - URL: http://127.0.0.1:8000/commitments/summary
-   - Description: Get summary by asset class
-
-3. Test each endpoint and verify the responses
-
-4. Try different investor IDs (1-4) and asset class filters:
-   - Asset classes: "Hedge Funds", "Private Equity", "Real Estate", 
-     "Infrastructure", "Natural Resources", "Private Debt"
 
 ==============================================================================
 INVESTOR ID MAPPING (ALPHABETICAL ORDER)
@@ -158,25 +118,13 @@ Investors Table:
 - type (String) 
 - country (String)
 - date_added (Date)
-- last_updated (Date)
 
 Commitments Table:
 - id (Primary Key, Integer)
 - investor_id (Foreign Key to investors.id)
 - asset_class (String)
-- amount (Float, in millions)
+- amount (Float)
 - currency (String, always GBP)
-
-==============================================================================
-DESIGN DECISIONS
-==============================================================================
-
-1. SQLModel Choice: Combines SQLAlchemy ORM power with Pydantic validation
-2. Alphabetical ID Assignment: Provides predictable, stable investor IDs
-3. Amount in Millions: Easier to read large numbers (58.0 vs 58000000)
-4. Separate Tables: Normalized design reduces redundancy
-5. Error Handling: Proper HTTP status codes (404 for not found)
-6. Query Parameters: Flexible filtering by asset class
 
 ==============================================================================
 DEACTIVATING VIRTUAL ENVIRONMENT
@@ -187,11 +135,3 @@ When finished, deactivate the virtual environment:
 deactivate
 
 ==============================================================================
-NOTES
-==============================================================================
-
-- SQLite database (investors.db) is created locally
-- All amounts are in GBP millions for readability
-- API follows RESTful conventions
-- Full type annotations for better IDE support
-- Comprehensive error handling with meaningful messages
